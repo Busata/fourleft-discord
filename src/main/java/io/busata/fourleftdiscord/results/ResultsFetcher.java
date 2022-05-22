@@ -21,13 +21,13 @@ public class ResultsFetcher {
 
     private final ChannelConfigurationService channelConfigurationService;
 
-    public EmbedCreateSpec getWeeklyResults(Snowflake channelId) {
+    public EmbedCreateSpec getCurrentEventResults(Snowflake channelId) {
         final var clubId = channelConfigurationService.findClubByChannelId(channelId);
         final var clubResult = api.getCurrentResults(clubId);
         return messageTemplateFacade.createEmbedFromClubResult(clubResult);
     }
 
-    public EmbedCreateSpec getPreviousWeeklyResults(Snowflake channelId) {
+    public EmbedCreateSpec getPreviousEventResults(Snowflake channelId) {
         final var clubId = channelConfigurationService.findClubByChannelId(channelId);
 
         final var clubResult = api.getPreviousResults(clubId);

@@ -59,7 +59,7 @@ public class CurrentResultsCommand implements WeeklyCommandHandler {
 
     public Mono<Message> createResults(ChatInputInteractionEvent event) {
         try {
-            return event.createFollowup(InteractionFollowupCreateSpec.builder().addEmbed(resultsFetcher.getWeeklyResults(event.getInteraction().getChannelId())).build());
+            return event.createFollowup(InteractionFollowupCreateSpec.builder().addEmbed(resultsFetcher.getCurrentEventResults(event.getInteraction().getChannelId())).build());
         } catch (Exception ex) {
             log.error("Error while loading the results", ex);
             return event.createFollowup("*Something went wrong or no active event found? Please try again later!*");

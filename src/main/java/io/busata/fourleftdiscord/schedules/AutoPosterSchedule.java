@@ -2,6 +2,7 @@ package io.busata.fourleftdiscord.schedules;
 
 import io.busata.fourleftdiscord.autoposting.AutoPostCommunityEventResultsService;
 import io.busata.fourleftdiscord.autoposting.AutoPostClubResultsService;
+import io.busata.fourleftdiscord.autoposting.AutoPosterAutomatedClubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 public class AutoPosterSchedule {
     private final AutoPostClubResultsService autoPostClubResultsService;
     private final AutoPostCommunityEventResultsService autoPostCommunityEventResultsService;
+
+    private final AutoPosterAutomatedClubService autoPosterAutomatedClubService;
 
     @Scheduled(fixedRate = 300000, initialDelay = 10000)
     public void postAutoSchedule() {
@@ -27,5 +30,19 @@ public class AutoPosterSchedule {
         autoPostCommunityEventResultsService.update();
         log.info("Community events check complete.");
     }
+
+    //TODO setup after championship is kicked off
+    //@Scheduled(cron = "0  57 9 * * *", zone="Europe/Brussels")
+    public void postAutomatedDailyClubResults() {
+        log.info("Posting Daily results");
+        autoPosterAutomatedClubService.postResults();
+    }
+
+    @Scheduled(cron = "0 1 10 * * *", zone="Europe/Brussels")
+    public void postDailyChallengeInfo() {
+        log.info("Posting Club new stage info");
+        autoPosterAutomatedClubService.postNewStage();
+    }
+
 
 }

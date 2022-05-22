@@ -61,7 +61,7 @@ public class PreviousResultsCommand implements WeeklyCommandHandler {
 
     public Mono<Message> createResults(ChatInputInteractionEvent event) {
         try {
-            return event.createFollowup(InteractionFollowupCreateSpec.builder().addEmbed(resultsFetcher.getPreviousWeeklyResults(event.getInteraction().getChannelId())).build());
+            return event.createFollowup(InteractionFollowupCreateSpec.builder().addEmbed(resultsFetcher.getPreviousEventResults(event.getInteraction().getChannelId())).build());
         } catch (Exception ex) {
             log.error("Error while loading the results", ex);
             return event.createFollowup("*Something went wrong. Please try again later!*");
