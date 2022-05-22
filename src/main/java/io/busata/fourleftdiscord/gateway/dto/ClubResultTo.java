@@ -20,4 +20,8 @@ public record ClubResultTo(
     public boolean hasNewEntries(long entryCount) {
         return entryCount != entries().size();
     }
+
+    public int sizeEntries() {
+        return entries.size();
+    }
 }

@@ -74,12 +74,21 @@ public class AutoPostClubResultsService {
             return;
         }
 
+        final var entryCountDelta = currentResults.sizeEntries() - autoPostTracking.getEntryCount();
+
         try {
             log.info("Creating and posting message for new entries");
 
+            List<ResultEntryTo> newEntries = getNewEntries(currentResults, autoPostTracking);
+
+            if(entryCountDelta != newEntries.size()) {
+                log.info("New entries not the same size as the entry count, something is off, skipping!");
+                return;
+            }
+
             discordMessageFacade.postMessage(
                     channelId,
-                    messageTemplateFacade.createAutopostMessage(currentResults, getNewEntries(currentResults, autoPostTracking)),
+                    messageTemplateFacade.createAutopostMessage(currentResults, newEntries),
                     MessageType.AUTO_POST
             );
         } catch (Exception ex) {
