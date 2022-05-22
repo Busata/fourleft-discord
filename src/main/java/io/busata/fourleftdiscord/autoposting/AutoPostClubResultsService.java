@@ -83,6 +83,7 @@ public class AutoPostClubResultsService {
 
             if(entryCountDelta != newEntries.size()) {
                 log.info("New entries not the same size as the entry count, something is off, skipping!");
+                repository.delete(autoPostTracking);
                 return;
             }
 
