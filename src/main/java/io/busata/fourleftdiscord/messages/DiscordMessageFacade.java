@@ -44,6 +44,4 @@ public class DiscordMessageFacade {
     public Message getLastMessage(Snowflake channelId) {
         return client.getChannelById(channelId).ofType(MessageChannel.class).flatMap(MessageChannel::getLastMessage).block();
     }
-
-
 }

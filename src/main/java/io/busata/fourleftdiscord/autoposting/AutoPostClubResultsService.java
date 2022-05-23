@@ -94,9 +94,11 @@ public class AutoPostClubResultsService {
         final var lastMessage = discordMessageFacade.getLastMessage(channelId);
 
         if (!autoPostTracking.getLastPostedMembers().isBlank() && api.hasMessage(lastMessage.getId().asLong(), MessageType.AUTO_POST)) {
+            log.info("Editing previous message");
             //Edit last message instead
             editPreviousMessage(lastMessage, currentResults, newEntries, autoPostTracking);
         } else {
+            log.info("Posting new message");
             // post new message
             postNewMessage(channelId, currentResults, newEntries, autoPostTracking);
         }
