@@ -2,6 +2,7 @@ package io.busata.fourleftdiscord.gateway;
 
 import io.busata.fourleftdiscord.gateway.dto.*;
 import io.busata.fourleftdiscord.fieldmapper.FieldMappingTo;
+import io.busata.fourleftdiscord.messages.MessageType;
 import io.busata.fourleftdiscord.messages.logging.MessageLogTo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -42,4 +43,7 @@ public interface FourLeftApi {
 
     @PostMapping(value="discord/messages")
     void postMessage(@RequestBody MessageLogTo messageLog);
+
+    @GetMapping(value="discord/message")
+    boolean hasMessage(@RequestParam long messageId, @RequestParam MessageType messageType);
 }

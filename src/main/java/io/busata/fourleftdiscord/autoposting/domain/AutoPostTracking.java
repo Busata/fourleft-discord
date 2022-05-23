@@ -27,4 +27,7 @@ public class AutoPostTracking {
     @Column(columnDefinition="text")
     private String memberList;
 
+    @Column(columnDefinition="text")
+    private String lastPostedMembers;
+
 }

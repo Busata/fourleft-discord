@@ -1,6 +1,9 @@
 package io.busata.fourleftdiscord.autoposting;
 
 import discord4j.common.util.Snowflake;
+import discord4j.core.object.entity.Message;
+import discord4j.core.spec.MessageEditSpec;
+import discord4j.discordjson.possible.Possible;
 import io.busata.fourleftdiscord.messages.DiscordMessageFacade;
 import io.busata.fourleftdiscord.channels.ChannelConfigurationService;
 import io.busata.fourleftdiscord.gateway.dto.ChannelConfigurationTo;
@@ -16,8 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @Slf4j
@@ -62,6 +67,7 @@ public class AutoPostClubResultsService {
         autoPostTracking.setChallengeId(currentResults.eventChallengeId());
         autoPostTracking.setEntryCount(currentResults.entries().size());
         autoPostTracking.setMemberList(currentResults.entries().stream().map(ResultEntryTo::name).collect(Collectors.joining(";")));
+        autoPostTracking.setLastPostedMembers("");
 
         repository.save(autoPostTracking);
     }
@@ -74,34 +80,60 @@ public class AutoPostClubResultsService {
             return;
         }
 
+        log.info("Creating and posting message for new entries");
         final var entryCountDelta = currentResults.sizeEntries() - autoPostTracking.getEntryCount();
 
-        try {
-            log.info("Creating and posting message for new entries");
+        List<ResultEntryTo> newEntries = getNewEntries(currentResults, autoPostTracking);
 
-            List<ResultEntryTo> newEntries = getNewEntries(currentResults, autoPostTracking);
-
-            if(entryCountDelta != newEntries.size()) {
-                log.info("New entries not the same size as the entry count, something is off, skipping!");
-                repository.delete(autoPostTracking);
-                return;
-            }
-
-            discordMessageFacade.postMessage(
-                    channelId,
-                    messageTemplateFacade.createAutopostMessage(currentResults, newEntries),
-                    MessageType.AUTO_POST
-            );
-        } catch (Exception ex) {
-            log.error("Something went wrong while posting the message", ex);
+        if (entryCountDelta != newEntries.size()) {
+            log.info("Entry list size change is different than actual entry count, something is off, skipping!");
+            repository.delete(autoPostTracking);
+            return;
         }
 
-        updateAutopostEntry(currentResults, autoPostTracking);
+        final var lastMessage = discordMessageFacade.getLastMessage(channelId);
+
+        if (!autoPostTracking.getLastPostedMembers().isBlank() && api.hasMessage(lastMessage.getId().asLong(), MessageType.AUTO_POST)) {
+            //Edit last message instead
+            editPreviousMessage(lastMessage, currentResults, newEntries, autoPostTracking);
+        } else {
+            // post new message
+            postNewMessage(channelId, currentResults, newEntries, autoPostTracking);
+        }
     }
 
-    private void updateAutopostEntry(ClubResultTo currentResults, AutoPostTracking autoPostTracking) {
+    private void postNewMessage(Snowflake channelId, ClubResultTo currentResults, List<ResultEntryTo> newEntries, AutoPostTracking autoPostTracking) {
+        final var autopostMessage = messageTemplateFacade.createAutopostMessage(currentResults, newEntries);
+
+        discordMessageFacade.postMessage(
+                channelId,
+                autopostMessage,
+                MessageType.AUTO_POST
+        );
+
         autoPostTracking.setEntryCount(currentResults.entries().size());
         autoPostTracking.setMemberList(currentResults.entries().stream().map(ResultEntryTo::name).collect(Collectors.joining(";")));
+        autoPostTracking.setLastPostedMembers(newEntries.stream().map(ResultEntryTo::name).collect(Collectors.joining(";")));
+        repository.save(autoPostTracking);
+
+    }
+
+    private void editPreviousMessage(Message lastMessage, ClubResultTo currentResults, List<ResultEntryTo> newEntries, AutoPostTracking autoPostTracking) {
+        List<String> previousEntries = Arrays.asList(autoPostTracking.getLastPostedMembers().split(";"));
+
+        final var extraEntries = currentResults.entries().stream().filter(entry -> previousEntries.contains(entry.name())).toList();
+
+        final var entriesToPost = Stream.concat(extraEntries.stream(), newEntries.stream()).sorted(Comparator.comparing(ResultEntryTo::rank)).collect(Collectors.toList());
+
+        final var autopostMessage = messageTemplateFacade.createAutopostMessage(currentResults, entriesToPost);
+
+        final var possibleMesage = Possible.of(java.util.Optional.ofNullable(autopostMessage));
+
+        lastMessage.edit(MessageEditSpec.builder().content(possibleMesage).build()).block();
+
+        autoPostTracking.setEntryCount(currentResults.entries().size());
+        autoPostTracking.setMemberList(currentResults.entries().stream().map(ResultEntryTo::name).collect(Collectors.joining(";")));
+        autoPostTracking.setLastPostedMembers(entriesToPost.stream().map(ResultEntryTo::name).collect(Collectors.joining(";")));
         repository.save(autoPostTracking);
     }
 

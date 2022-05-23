@@ -10,6 +10,7 @@ import io.busata.fourleftdiscord.messages.logging.MessageLogTo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
@@ -38,6 +39,10 @@ public class DiscordMessageFacade {
                 message.getId().asLong(),
                 message.getContent(),
                 message.getChannelId().asLong()));
+    }
+
+    public Message getLastMessage(Snowflake channelId) {
+        return client.getChannelById(channelId).ofType(MessageChannel.class).flatMap(MessageChannel::getLastMessage).block();
     }
 
 
