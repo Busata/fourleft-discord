@@ -53,7 +53,7 @@ public class AutoPostClubResultsService {
                                     createNewAutopostEntry(currentResults);
                                 });
                     } catch (Exception ex) {
-                        log.warn("Something wrong while posting auto results, probably has no current event", ex);
+                        log.warn("!Something wrong while posting auto results, probably has no current event", ex);
                     }
                 });
     }
@@ -73,20 +73,20 @@ public class AutoPostClubResultsService {
     }
 
     private void handleExistingAutopostEntry(Snowflake channelId, ClubResultTo currentResults, AutoPostTracking autoPostTracking) {
-        log.info("Autopost entry already exists, checking new entries.");
+        log.info("** Autopost entry already exists, checking new entries.");
 
         if (!currentResults.hasNewEntries(autoPostTracking.getEntryCount())) {
-            log.info("Entry count still the same, skipping.");
+            log.info("**** Entry count still the same, skipping.");
             return;
         }
 
-        log.info("Creating and posting message for new entries");
+        log.info("** Creating and posting message for new entries");
         final var entryCountDelta = currentResults.sizeEntries() - autoPostTracking.getEntryCount();
 
         List<ResultEntryTo> newEntries = getNewEntries(currentResults, autoPostTracking);
 
         if (entryCountDelta != newEntries.size()) {
-            log.info("Entry list size change is different than actual entry count, something is off, skipping!");
+            log.info("!! Entry list size change is different than actual entry count, something is off, skipping!");
             repository.delete(autoPostTracking);
             return;
         }
@@ -94,11 +94,11 @@ public class AutoPostClubResultsService {
         final var lastMessage = discordMessageFacade.getLastMessage(channelId);
 
         if (!autoPostTracking.getLastPostedMembers().isBlank() && api.hasMessage(lastMessage.getId().asLong(), MessageType.AUTO_POST)) {
-            log.info("Editing previous message");
+            log.info("**** Editing previous message");
             //Edit last message instead
             editPreviousMessage(lastMessage, currentResults, newEntries, autoPostTracking);
         } else {
-            log.info("Posting new message");
+            log. info("**** Posting new message");
             // post new message
             postNewMessage(channelId, currentResults, newEntries, autoPostTracking);
         }
