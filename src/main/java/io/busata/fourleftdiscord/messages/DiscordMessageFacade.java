@@ -3,6 +3,7 @@ package io.busata.fourleftdiscord.messages;
 import discord4j.common.util.Snowflake;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.User;
 import discord4j.core.object.entity.channel.MessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import io.busata.fourleftdiscord.gateway.FourLeftApi;
@@ -37,6 +38,7 @@ public class DiscordMessageFacade {
         api.postMessage(new MessageLogTo(
                 messageType,
                 message.getId().asLong(),
+                message.getAuthor().map(User::getUsername).orElse(""),
                 message.getContent(),
                 message.getChannelId().asLong()));
     }

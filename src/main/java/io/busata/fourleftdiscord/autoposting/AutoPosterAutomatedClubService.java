@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class AutoPosterAutomatedClubService {
     private final ResultsFetcher resultsFetcher;
     private final DiscordMessageFacade discordUtils;
-    Snowflake clubId = Snowflake.of(418341);
 
     public void postResults() {
         EmbedCreateSpec message = resultsFetcher.getPreviousEventResults(DiscordChannels.DIRTY_DAILIES);
