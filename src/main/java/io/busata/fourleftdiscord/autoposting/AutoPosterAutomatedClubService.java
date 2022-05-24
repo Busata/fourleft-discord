@@ -19,7 +19,7 @@ public class AutoPosterAutomatedClubService {
     Snowflake clubId = Snowflake.of(418341);
 
     public void postResults() {
-        EmbedCreateSpec message = resultsFetcher.getPreviousEventResults(clubId);
+        EmbedCreateSpec message = resultsFetcher.getPreviousEventResults(DiscordChannels.DIRTY_DAILIES);
 
 
         try {
@@ -34,7 +34,7 @@ public class AutoPosterAutomatedClubService {
     }
 
     public void postNewStage() {
-        EmbedCreateSpec message = resultsFetcher.getCurrentEventResults(clubId);
+        EmbedCreateSpec message = resultsFetcher.getCurrentEventResults(DiscordChannels.DIRTY_DAILIES);
 
             try {
                 discordUtils.postMessage(
