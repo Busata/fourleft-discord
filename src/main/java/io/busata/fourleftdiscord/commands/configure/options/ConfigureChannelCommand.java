@@ -13,12 +13,16 @@ import io.busata.fourleftdiscord.commands.BotCommandOptionHandler;
 import io.busata.fourleftdiscord.commands.CommandNames;
 import io.busata.fourleftdiscord.commands.CommandOptions;
 import io.busata.fourleftdiscord.gateway.FourLeftApi;
+import io.busata.fourleftdiscord.gateway.dto.ChannelConfigurationTo;
 import io.busata.fourleftdiscord.gateway.dto.QueryTrackResultsTo;
+import io.busata.fourleftdiscord.messages.creation.ConfigurationMessageFactory;
 import io.busata.fourleftdiscord.messages.creation.QueryMessageFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -26,6 +30,7 @@ import reactor.core.publisher.Mono;
 public class ConfigureChannelCommand implements BotCommandOptionHandler {
 
     private final FourLeftApi api;
+    private final ConfigurationMessageFactory configurationMessageFactory;
 
     @Override
     public String getCommand() {
@@ -46,6 +51,22 @@ public class ConfigureChannelCommand implements BotCommandOptionHandler {
 
     @Override
     public Mono<Void> handle(ChatInputInteractionEvent event, MessageChannel channel) {
-        return event.reply("Yep, here be dragons").withEphemeral(true).then();
+        return event.deferReply().withEphemeral(true).then(logSummary(event)).then();
+    }
+
+    private Mono<Void> logSummary(ChatInputInteractionEvent event) {
+        return Mono.just(event)
+                .flatMap(evt -> {
+                    final var channelConfigurations = api.getChannels();
+
+                   return channelConfigurations.stream().filter(config -> {
+                        return config.channelId() == event.getInteraction().getChannelId().asLong();
+                    }).findFirst()
+                            .map(configuration -> {
+                                return event.createFollowup(InteractionFollowupCreateSpec.builder().addEmbed(configurationMessageFactory.create(configuration)).build());
+                            }).orElseGet(() -> {
+                                return event.createFollowup("This channel has no configuration");
+                            });
+                }).then();
     }
 }

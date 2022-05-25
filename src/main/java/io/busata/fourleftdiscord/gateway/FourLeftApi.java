@@ -36,6 +36,7 @@ public interface FourLeftApi {
     @GetMapping(value="discord/channels")
     List<ChannelConfigurationTo> getChannels();
 
+
     @GetMapping(value="query/track")
     QueryTrackResultsTo queryTrack(@RequestParam String stageName);
     @GetMapping(value="query/name")
