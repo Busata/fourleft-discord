@@ -1,4 +1,4 @@
-package io.busata.fourleftdiscord.commands.providers;
+package io.busata.fourleftdiscord.commands.results.options;
 
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
@@ -9,7 +9,9 @@ import discord4j.core.object.entity.channel.MessageChannel;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ImmutableApplicationCommandOptionData;
 import io.busata.fourleftdiscord.channels.ChannelConfigurationService;
-import io.busata.fourleftdiscord.commands.WeeklyCommandHandler;
+import io.busata.fourleftdiscord.commands.BotCommandOptionHandler;
+import io.busata.fourleftdiscord.commands.CommandNames;
+import io.busata.fourleftdiscord.commands.CommandOptions;
 import io.busata.fourleftdiscord.gateway.FourLeftApi;
 import io.busata.fourleftdiscord.gateway.dto.ChannelConfigurationTo;
 import io.busata.fourleftdiscord.gateway.dto.TrackUserRequestTo;
@@ -21,19 +23,23 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class TrackUserDailyCommand implements WeeklyCommandHandler {
+public class TrackUserDailyCommand implements BotCommandOptionHandler {
     private final ChannelConfigurationService channelConfigurationService;
 
     private final FourLeftApi api;
 
     @Override
     public String getCommand() {
-        return "track";
+        return CommandNames.RESULTS;
+    }
+    @Override
+    public String getOption() {
+        return CommandOptions.TRACK;
     }
     @Override
     public ImmutableApplicationCommandOptionData buildOption() {
         return ApplicationCommandOptionData.builder()
-                .name(getCommand())
+                .name(getOption())
                 .description("Track user for the daily weekly monthly")
                 .type(ApplicationCommandOption.Type.SUB_COMMAND.getValue())
                 .addOption(ApplicationCommandOptionData.builder()

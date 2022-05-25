@@ -1,4 +1,4 @@
-package io.busata.fourleftdiscord.commands.providers;
+package io.busata.fourleftdiscord.commands.results.options;
 
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
@@ -9,7 +9,9 @@ import discord4j.core.spec.InteractionFollowupCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ImmutableApplicationCommandOptionData;
 import io.busata.fourleftdiscord.channels.ChannelConfigurationService;
-import io.busata.fourleftdiscord.commands.WeeklyCommandHandler;
+import io.busata.fourleftdiscord.commands.BotCommandOptionHandler;
+import io.busata.fourleftdiscord.commands.CommandNames;
+import io.busata.fourleftdiscord.commands.CommandOptions;
 import io.busata.fourleftdiscord.gateway.dto.ChannelConfigurationTo;
 import io.busata.fourleftdiscord.messages.DiscordMessageFacade;
 import io.busata.fourleftdiscord.messages.MessageType;
@@ -26,7 +28,15 @@ import java.util.List;
 @Slf4j
 @Order(0)
 @RequiredArgsConstructor
-public class CurrentResultsCommand implements WeeklyCommandHandler {
+public class CurrentResultsCommand implements BotCommandOptionHandler {
+    @Override
+    public String getCommand() {
+        return CommandNames.RESULTS;
+    }
+    @Override
+    public String getOption() {
+        return CommandOptions.CURRENT;
+    }
     private final ResultsFetcher resultsFetcher;
     private final ChannelConfigurationService channelConfigurationService;
 
@@ -35,20 +45,17 @@ public class CurrentResultsCommand implements WeeklyCommandHandler {
     @Override
     public ImmutableApplicationCommandOptionData buildOption() {
         return ApplicationCommandOptionData.builder()
-                .name(getCommand())
+                .name(getOption())
                 .description("Get results of the active event")
                 .type(ApplicationCommandOption.Type.SUB_COMMAND.getValue())
                 .build();
     }
+
     @Override
     public List<Snowflake> getResponseChannels() {
         return channelConfigurationService.getChannels().stream().map(ChannelConfigurationTo::channelId).map(Snowflake::of).toList();
     }
 
-    @Override
-    public String getCommand() {
-        return "current";
-    }
 
     @Override
     public Mono<Void> handle(ChatInputInteractionEvent event, MessageChannel channel) {

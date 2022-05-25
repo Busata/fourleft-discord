@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-public interface WeeklyCommandHandler {
+public interface BotCommandOptionHandler {
     ImmutableApplicationCommandOptionData buildOption();
 
     default boolean canRespond(Snowflake channelId) {
@@ -22,9 +22,15 @@ public interface WeeklyCommandHandler {
 
     String getCommand();
 
+    String getOption();
+
+
     default boolean canHandle(ChatInputInteractionEvent event) {
-        return event.getOption(getCommand()).isPresent();
+        return
+                event.getCommandName().equalsIgnoreCase(getCommand()) &&
+                event.getOption(getOption()).isPresent();
     }
+
 
     Mono<Void> handle(ChatInputInteractionEvent event, MessageChannel channel);
 }

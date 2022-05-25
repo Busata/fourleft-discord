@@ -1,13 +1,13 @@
 package io.busata.fourleftdiscord.commands;
 
-import discord4j.common.util.Snowflake;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.MessageChannel;
+import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.discordjson.json.ApplicationCommandData;
+import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 import discord4j.discordjson.json.ImmutableApplicationCommandRequest;
+import io.busata.fourleftdiscord.commands.results.ResultsCommandFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,24 +21,31 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class WeeklyCommandListener implements EventListener<ChatInputInteractionEvent> {
+public class BotInputInteractionListener implements EventListener<ChatInputInteractionEvent> {
     private final GatewayDiscordClient client;
 
-    private final List<WeeklyCommandHandler> commandHandlers;
+    private final List<CommandProvider> commandProviders;
+
+    private final List<BotCommandOptionHandler> commandHandlers;
 
     @PostConstruct
     public void createCommand() {
-
         long applicationId = client.getRestClient().getApplicationId().block();
 
-        ImmutableApplicationCommandRequest resultsCommand = buildCommand();
+        deleteExistingCommands(applicationId);
 
-        /*
-        client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(979035609039532083L)).flatMap(Message::delete);
-        }).block();
-        */
+        List<ImmutableApplicationCommandRequest> commands = commandProviders.stream().map(CommandProvider::create).collect(Collectors.toList());
 
+        List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
+            commands.forEach(commandRequest -> {
+                client.getRestClient().getApplicationService()
+                        .createGuildApplicationCommand(applicationId, guild, commandRequest)
+                        .subscribe();
+            });
+        });
+    }
+
+    private void deleteExistingCommands(long applicationId) {
         List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
             List<String> discordCommands = client.getRestClient()
                     .getApplicationService()
@@ -50,25 +57,6 @@ public class WeeklyCommandListener implements EventListener<ChatInputInteraction
                 client.getRestClient().getApplicationService().deleteGuildApplicationCommand(applicationId, guild, Long.parseLong(commandId)).subscribe();
             });
         });
-
-        List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
-            client.getRestClient().getApplicationService()
-                    .createGuildApplicationCommand(applicationId, guild, resultsCommand)
-                    .subscribe();
-        });
-    }
-
-    private ImmutableApplicationCommandRequest buildCommand() {
-        ImmutableApplicationCommandRequest.Builder weekly = ApplicationCommandRequest.builder()
-                .name("results")
-                .description("Get the results of the current weekly event");
-
-        for (WeeklyCommandHandler commandHandler : commandHandlers) {
-            log.info("Adding handler {}", commandHandler);
-            weekly.addOption(commandHandler.buildOption());
-        }
-
-        return weekly.build();
     }
 
     @Override
@@ -79,7 +67,6 @@ public class WeeklyCommandListener implements EventListener<ChatInputInteraction
     @Override
     public Mono<Void> execute(ChatInputInteractionEvent event) {
         List<Mono<Void>> results = commandHandlers.stream().map(handler -> Mono.just(event)
-                .filter(evt -> evt.getCommandName().equals("results"))
                 .filter(handler::canHandle)
                 .flatMap(evt ->
                         evt.getInteraction()

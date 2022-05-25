@@ -1,4 +1,4 @@
-package io.busata.fourleftdiscord.commands.providers;
+package io.busata.fourleftdiscord.commands.results.options;
 
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandInteractionOption;
@@ -9,7 +9,9 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.InteractionFollowupCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ImmutableApplicationCommandOptionData;
-import io.busata.fourleftdiscord.commands.WeeklyCommandHandler;
+import io.busata.fourleftdiscord.commands.BotCommandOptionHandler;
+import io.busata.fourleftdiscord.commands.CommandNames;
+import io.busata.fourleftdiscord.commands.CommandOptions;
 import io.busata.fourleftdiscord.gateway.FourLeftApi;
 import io.busata.fourleftdiscord.gateway.dto.QueryTrackResultsTo;
 import io.busata.fourleftdiscord.messages.creation.QueryMessageFactory;
@@ -21,19 +23,23 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class QueryStageCommand implements WeeklyCommandHandler {
+public class QueryStageCommand implements BotCommandOptionHandler {
 
     private final QueryMessageFactory queryMessageFactory;
     private final FourLeftApi api;
 
     @Override
     public String getCommand() {
-        return "query";
+        return CommandNames.RESULTS;
+    }
+    @Override
+    public String getOption() {
+        return CommandOptions.QUERY;
     }
     @Override
     public ImmutableApplicationCommandOptionData buildOption() {
         return ApplicationCommandOptionData.builder()
-                .name(getCommand())
+                .name(getOption())
                 .description("Query stage name")
                 .type(ApplicationCommandOption.Type.SUB_COMMAND.getValue())
                 .addOption(ApplicationCommandOptionData.builder()

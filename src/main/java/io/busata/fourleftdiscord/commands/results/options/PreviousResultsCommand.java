@@ -1,4 +1,4 @@
-package io.busata.fourleftdiscord.commands.providers;
+package io.busata.fourleftdiscord.commands.results.options;
 
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
@@ -9,7 +9,9 @@ import discord4j.core.spec.InteractionFollowupCreateSpec;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ImmutableApplicationCommandOptionData;
 import io.busata.fourleftdiscord.channels.ChannelConfigurationService;
-import io.busata.fourleftdiscord.commands.WeeklyCommandHandler;
+import io.busata.fourleftdiscord.commands.BotCommandOptionHandler;
+import io.busata.fourleftdiscord.commands.CommandNames;
+import io.busata.fourleftdiscord.commands.CommandOptions;
 import io.busata.fourleftdiscord.gateway.dto.ChannelConfigurationTo;
 import io.busata.fourleftdiscord.messages.DiscordMessageFacade;
 import io.busata.fourleftdiscord.messages.MessageType;
@@ -26,22 +28,26 @@ import java.util.List;
 @Slf4j
 @Order(1)
 @RequiredArgsConstructor
-public class PreviousResultsCommand implements WeeklyCommandHandler {
+public class PreviousResultsCommand implements BotCommandOptionHandler {
 
     private final ResultsFetcher resultsFetcher;
     private final ChannelConfigurationService channelConfigurationService;
 
     private final DiscordMessageFacade discordMessageFacade;
 
-
     @Override
     public String getCommand() {
-        return "previous";
+        return CommandNames.RESULTS;
     }
+    @Override
+    public String getOption() {
+        return CommandOptions.PREVIOUS;
+    }
+
     @Override
     public ImmutableApplicationCommandOptionData buildOption() {
         return ApplicationCommandOptionData.builder()
-                .name(getCommand())
+                .name(getOption())
                 .description("Get results of the last event")
                 .type(ApplicationCommandOption.Type.SUB_COMMAND.getValue())
                 .build();
