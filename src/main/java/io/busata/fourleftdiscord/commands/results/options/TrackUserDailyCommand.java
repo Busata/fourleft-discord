@@ -63,11 +63,6 @@ public class TrackUserDailyCommand implements BotCommandOptionHandler {
     }
 
     @Override
-    public boolean canHandle(ChatInputInteractionEvent event) {
-        return event.getOption(getCommand()).isPresent();
-    }
-
-    @Override
     public Mono<Void> handle(ChatInputInteractionEvent event, MessageChannel channel) {
         return Mono.just(event).flatMap(evt -> {
             return evt.deferReply().withEphemeral(true).then(trackUser(event));
