@@ -39,7 +39,7 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
         List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
             commands.forEach(commandRequest -> {
                 client.getRestClient().getApplicationService()
-                        .get(applicationId, guild, commandRequest)
+                        .createGuildApplicationCommand(applicationId, guild, commandRequest)
                         .subscribe();
             });
         });
