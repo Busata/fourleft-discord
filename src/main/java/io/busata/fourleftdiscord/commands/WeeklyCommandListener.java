@@ -33,23 +33,12 @@ public class WeeklyCommandListener implements EventListener<ChatInputInteraction
 
         ImmutableApplicationCommandRequest resultsCommand = buildCommand();
 
-
         client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(978949777410646086L)).flatMap(Message::delete);
-        }).block();
-        client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(978933990717280316L)).flatMap(Message::delete);
+            return channel.getMessageById(Snowflake.of(977783435617767424L)).flatMap(Message::delete);
         }).block();
 
         client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(978874762937897010L)).flatMap(Message::delete);
-        }).block();
-        client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(978814365530730556L)).flatMap(Message::delete);
-        }).block();
-        
-        client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(978411268987813928L)).flatMap(Message::delete);
+            return channel.getMessageById(Snowflake.of(978221054688382997L)).flatMap(Message::delete);
         }).block();
 
         List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
