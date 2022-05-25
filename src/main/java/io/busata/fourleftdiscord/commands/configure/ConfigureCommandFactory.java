@@ -24,7 +24,7 @@ public class ConfigureCommandFactory implements CommandProvider {
     public ImmutableApplicationCommandRequest create() {
         ImmutableApplicationCommandRequest.Builder configure = ApplicationCommandRequest.builder()
                 .name(CommandNames.CONFIGURE)
-                .defaultPermission(false)
+                .defaultPermission(true)
                 .description("Bot configuration");
 
         commandHandlers.stream()
