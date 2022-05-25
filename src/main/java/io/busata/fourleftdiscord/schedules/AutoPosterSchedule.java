@@ -31,7 +31,7 @@ public class AutoPosterSchedule {
         log.info("Community events check complete.");
     }
 
-    @Scheduled(cron = "0  58 9 * * *", zone="Europe/Brussels")
+    @Scheduled(cron = "0  11 18 * * *", zone="Europe/Brussels")
     public void postAutomatedDailyClubResults() {
         log.info("Posting Daily results");
         autoPosterAutomatedClubService.postResults();

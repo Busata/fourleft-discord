@@ -1,6 +1,5 @@
 package io.busata.fourleftdiscord.autoposting;
 
-import discord4j.common.util.Snowflake;
 import discord4j.core.spec.EmbedCreateSpec;
 import io.busata.fourleftdiscord.commands.DiscordChannels;
 import io.busata.fourleftdiscord.messages.DiscordMessageFacade;
