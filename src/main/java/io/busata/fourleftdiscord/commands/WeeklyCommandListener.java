@@ -34,11 +34,7 @@ public class WeeklyCommandListener implements EventListener<ChatInputInteraction
         ImmutableApplicationCommandRequest resultsCommand = buildCommand();
 
         client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(977783435617767424L)).flatMap(Message::delete);
-        }).block();
-
-        client.getChannelById(Snowflake.of(817405818349682729L)).ofType(MessageChannel.class).flatMap(channel -> {
-            return channel.getMessageById(Snowflake.of(978221054688382997L)).flatMap(Message::delete);
+            return channel.getMessageById(Snowflake.of(979035609039532083L)).flatMap(Message::delete);
         }).block();
 
         List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
