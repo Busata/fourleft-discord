@@ -1,8 +1,11 @@
 package io.busata.fourleftdiscord.commands;
 
+import discord4j.common.util.Snowflake;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandOption;
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.MessageChannel;
 import discord4j.discordjson.json.ApplicationCommandData;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ApplicationCommandRequest;
@@ -31,6 +34,11 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
     @PostConstruct
     public void createCommand() {
         long applicationId = client.getRestClient().getApplicationId().block();
+
+
+        client.getChannelById(Snowflake.of(892373522473685054L)).ofType(MessageChannel.class).flatMap(channel -> {
+            return channel.getMessageById(Snowflake.of(979071319335387177L)).flatMap(Message::delete).then();
+        }).then();
 
         deleteExistingCommands(applicationId);
 
