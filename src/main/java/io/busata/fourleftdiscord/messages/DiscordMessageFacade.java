@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -43,7 +45,12 @@ public class DiscordMessageFacade {
                 message.getChannelId().asLong()));
     }
 
-    public Message getLastMessage(Snowflake channelId) {
-        return client.getChannelById(channelId).ofType(MessageChannel.class).flatMap(MessageChannel::getLastMessage).block();
+    public Optional<Message> getLastMessage(Snowflake channelId) {
+        try {
+            return Optional.ofNullable(client.getChannelById(channelId).ofType(MessageChannel.class).flatMap(MessageChannel::getLastMessage).block());
+        } catch (Exception ex) {
+            log.error("Something went wrong while getting last message", ex);
+            return Optional.empty();
+        }
     }
 }

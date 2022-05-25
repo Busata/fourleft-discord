@@ -91,12 +91,13 @@ public class AutoPostClubResultsService {
             return;
         }
 
+
         final var lastMessage = discordMessageFacade.getLastMessage(channelId);
 
-        if (!(autoPostTracking.getLastPostedMembers() == null || autoPostTracking.getLastPostedMembers().isBlank()) && api.hasMessage(lastMessage.getId().asLong(), MessageType.AUTO_POST)) {
+        if (lastMessage.isPresent() && !(autoPostTracking.getLastPostedMembers() == null || autoPostTracking.getLastPostedMembers().isBlank()) && api.hasMessage(lastMessage.get().getId().asLong(), MessageType.AUTO_POST)) {
             log.info("**** Editing previous message");
             //Edit last message instead
-            editPreviousMessage(lastMessage, currentResults, newEntries, autoPostTracking);
+            editPreviousMessage(lastMessage.get(), currentResults, newEntries, autoPostTracking);
         } else {
             log. info("**** Posting new message");
             // post new message
