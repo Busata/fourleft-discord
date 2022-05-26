@@ -31,13 +31,13 @@ public class AutoPosterSchedule {
         log.info("Community events check complete.");
     }
 
-    @Scheduled(cron = "0  58 9 * * *", zone="Europe/Brussels")
+    @Scheduled(cron = "0 1 10 * * *", zone="Europe/Brussels")
     public void postAutomatedDailyClubResults() {
         log.info("Posting Daily results");
         autoPosterAutomatedClubService.postResults();
     }
 
-    @Scheduled(cron = "0 1 10 * * *", zone="Europe/Brussels")
+    @Scheduled(cron = "5 1 10 * * *", zone="Europe/Brussels")
     public void postDailyChallengeInfo() {
         log.info("Posting Club new stage info");
         autoPosterAutomatedClubService.postNewStage();

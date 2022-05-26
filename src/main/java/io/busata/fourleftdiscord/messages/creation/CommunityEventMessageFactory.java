@@ -33,8 +33,7 @@ public class CommunityEventMessageFactory {
                 .stream()
                 .filter(CommunityChallengeSummaryTo::isDaily)
                 .filter(CommunityChallengeSummaryTo::hasEntries)
-                .map(this::createEmbed)
-                .collect(Collectors.toList());
+                .map(this::createEmbed).collect(Collectors.toList());
 
         List<EmbedCreateSpec.Builder> weeklies = communityResults
                 .stream()
