@@ -28,7 +28,7 @@ public class ClubEventResultMessageFactory {
         builder.addField( clubResult.stageNames().size() > 0 ? "Stages" : "Stage", String.join(" • ", clubResult.stageNames()), true);
         builder.addField("Car", fieldMapper.createHumanReadable(clubResult.vehicleClass()), true);
 
-        final var sortedEntries = clubResult.entries().stream().sorted(Comparator.comparing(ResultEntryTo::rank)).collect(Collectors.toList());
+        final var sortedEntries = clubResult.entries().stream().sorted(Comparator.comparing(ResultEntryTo::rank)).limit(50).collect(Collectors.toList());
 
 
         final var fieldsRequired = (int) Math.ceil(sortedEntries.size() / 10f);
