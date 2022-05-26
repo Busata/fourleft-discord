@@ -41,6 +41,11 @@ public class ClubEventResultMessageFactory {
             builder.addField(determineHeader(i), collect, false);
         }
 
+        if(clubResult.entries().size() > 50) {
+            builder.addField("\u200B", "*Results limited to top 50 (Total: %s entries)*".formatted(clubResult.entries().size()), false);
+        }
+
+
         builder.addField("**Last update**", "*%s*".formatted(new PrettyTime().format(clubResult.lastUpdate())), true);
         builder.addField("**Event ending**", "<t:%s:R>".formatted(clubResult.endTime().toInstant().atZone(ZoneOffset.UTC).toEpochSecond()), true);
 
