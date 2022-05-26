@@ -42,7 +42,7 @@ public class ClubEventResultMessageFactory {
         }
 
         if(clubResult.entries().size() > 50) {
-            builder.addField("\u200B", "*Results limited to top 50 (Total: %s entries)*".formatted(clubResult.entries().size()), false);
+            builder.addField("\u200B", "*Results limited to     top 50 (Total: %s entries)*".formatted(clubResult.entries().size()), false);
         }
 
 
