@@ -1,4 +1,4 @@
-package io.busata.fourleftdiscord.commands.results.options;
+package io.busata.fourleftdiscord.commands.track.options;
 
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
@@ -30,11 +30,11 @@ public class TrackUserDailyCommand implements BotCommandOptionHandler {
 
     @Override
     public String getCommand() {
-        return CommandNames.RESULTS;
+        return CommandNames.TRACK;
     }
     @Override
     public String getOption() {
-        return CommandOptions.TRACK;
+        return CommandOptions.RESULTS;
     }
     @Override
     public ImmutableApplicationCommandOptionData buildOption() {

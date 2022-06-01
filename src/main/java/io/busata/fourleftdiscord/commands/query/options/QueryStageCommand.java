@@ -1,4 +1,4 @@
-package io.busata.fourleftdiscord.commands.results.options;
+package io.busata.fourleftdiscord.commands.query.options;
 
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.command.ApplicationCommandInteractionOption;
@@ -30,11 +30,11 @@ public class QueryStageCommand implements BotCommandOptionHandler {
 
     @Override
     public String getCommand() {
-        return CommandNames.RESULTS;
+        return CommandNames.QUERY;
     }
     @Override
     public String getOption() {
-        return CommandOptions.QUERY;
+        return CommandOptions.STAGE;
     }
     @Override
     public ImmutableApplicationCommandOptionData buildOption() {
