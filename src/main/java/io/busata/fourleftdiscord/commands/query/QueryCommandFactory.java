@@ -24,7 +24,6 @@ public class QueryCommandFactory implements CommandProvider {
     public ImmutableApplicationCommandRequest create() {
         ImmutableApplicationCommandRequest.Builder commandBuilder = ApplicationCommandRequest.builder()
                 .name(CommandNames.QUERY)
-                .defaultPermission(false)
                 .description("Query users");
 
         commandHandlers.stream()
