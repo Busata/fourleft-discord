@@ -39,7 +39,7 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
 
         List<ImmutableApplicationCommandRequest> commands = commandProviders.stream().map(CommandProvider::create).collect(Collectors.toList());
 
-        List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
+        List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD, DiscordGuilds.SCOTTISH_RALLY_GROUP).forEach(guild -> {
             commands.forEach(commandRequest -> {
                 client.getRestClient().getApplicationService()
                         .createGuildApplicationCommand(applicationId, guild, commandRequest)
@@ -49,7 +49,7 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
     }
 
     private void deleteExistingCommands(long applicationId) {
-        List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD).forEach(guild -> {
+        List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD, DiscordGuilds.SCOTTISH_RALLY_GROUP).forEach(guild -> {
             List<String> discordCommands = client.getRestClient()
                     .getApplicationService()
                     .getGuildApplicationCommands(applicationId, guild)
