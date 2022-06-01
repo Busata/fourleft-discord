@@ -47,7 +47,7 @@ public class CommunityEventMessageFactory {
                 .filter(CommunityChallengeSummaryTo::hasEntries)
                 .map(this::createEmbed).collect(Collectors.toList());
 
-        final var infoMessage = List.of(EmbedCreateSpec.builder().footer("Add your name to the board? /results track", null));
+        final var infoMessage = List.of(EmbedCreateSpec.builder().footer("Add your name to the board? /track results", null));
 
         List<EmbedCreateSpec.Builder> collect = Stream.of(dailies, weeklies, monthlies, infoMessage)
                 .flatMap(List::stream)
