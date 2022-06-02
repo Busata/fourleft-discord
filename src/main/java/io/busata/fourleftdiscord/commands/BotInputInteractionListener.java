@@ -33,6 +33,7 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
 
     @PostConstruct
     public void createCommand() {
+        /* TODO find a proper way to deploy command changes
         long applicationId = client.getRestClient().getApplicationId().block();
 
         deleteExistingCommands(applicationId);
@@ -45,7 +46,7 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
                         .createGuildApplicationCommand(applicationId, guild, commandRequest)
                         .subscribe();
             });
-        });
+        });*/
     }
 
     private void deleteExistingCommands(long applicationId) {
