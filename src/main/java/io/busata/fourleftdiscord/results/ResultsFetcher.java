@@ -41,7 +41,7 @@ public class ResultsFetcher {
         return messageTemplateFacade.createEmbedFromStandingEntries(result);
     }
     public List<EmbedCreateSpec> getCommunityEventMessages() {
-        List<CommunityChallengeSummaryTo> communityResults = api.getCommunityResults();
+        List<CommunityChallengeSummaryTo> communityResults = api.getCommunityResultsFromYesterday();
         return messageTemplateFacade.createEmbedFromCommunityEventResults(communityResults);
     }
 

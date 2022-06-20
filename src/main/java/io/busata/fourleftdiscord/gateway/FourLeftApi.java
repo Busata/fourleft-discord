@@ -27,6 +27,9 @@ public interface FourLeftApi {
     @GetMapping(value="community/results")
     List<CommunityChallengeSummaryTo> getCommunityResults();
 
+    @GetMapping(value="community/results/yesterday")
+    List<CommunityChallengeSummaryTo> getCommunityResultsFromYesterday();
+
     @GetMapping(value="discord/field_mappings")
     List<FieldMappingTo> getFieldMappings();
 
