@@ -22,7 +22,6 @@ public class AutoPostCommunityEventResultsService
     public void update() {
         List<EmbedCreateSpec> messages = resultsFetcher.getCommunityEventMessages();
 
-        discordMessageFacade.postMessage(DiscordChannels.DIRTY_MAIN_CHAT, "I'm sorry, Nastya Disaster! Here are the results from yesterday", MessageType.COMMUNITY_EVENT);
         messages.forEach(message -> {
             try {
                 discordMessageFacade.postMessage(
