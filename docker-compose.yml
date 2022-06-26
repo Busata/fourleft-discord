@@ -1,0 +1,28 @@
+version: '3.5'
+services:
+  fourleft_discord:
+    build: .
+    container_name: fourleft_discord
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=${DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASS}
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+    depends_on:
+      - db.fourleft_discord
+  db.fourleft_discord:
+    container_name: db.fourleft_discord
+    image: postgres
+    volumes:
+      - pgdatafourleftdiscord:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+volumes:
+  pgdatafourleftdiscord:
+networks:
+  default:
+    name: veevi
