@@ -24,7 +24,13 @@ public class CommunityEventMessageFactory {
             Color.GREEN,
             Color.RED,
             Color.MAGENTA,
-            Color.TAHITI_GOLD
+            Color.TAHITI_GOLD,
+            Color.DISCORD_WHITE,
+            Color.BROWN,
+            Color.CYAN,
+            Color.ENDEAVOUR,
+            Color.WHITE,
+            Color.SUBMARINE
     );
 
     public List<EmbedCreateSpec> getEmbeds(List<CommunityChallengeSummaryTo> communityResults) {
