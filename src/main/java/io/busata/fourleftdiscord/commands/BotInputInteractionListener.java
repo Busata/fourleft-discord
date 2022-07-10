@@ -35,7 +35,13 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
     public void createCommand() {
         long applicationId = client.getRestClient().getApplicationId().block();
 
-        deleteExistingCommands(applicationId);
+        client.getChannelById(Snowflake.of(977962740234747954L)).ofType(MessageChannel.class).flatMap(channel -> {
+            return channel.getMessageById(Snowflake.of(995644665753776198L)).flatMap(message -> {
+               return message.delete();
+            });
+        }).then();
+
+        /*deleteExistingCommands(applicationId);
 
         List<ImmutableApplicationCommandRequest> commands = commandProviders.stream().map(CommandProvider::create).collect(Collectors.toList());
 
@@ -45,7 +51,7 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
                         .createGuildApplicationCommand(applicationId, guild, commandRequest)
                         .subscribe();
             });
-        });
+        });*/
     }
 
     private void deleteExistingCommands(long applicationId) {

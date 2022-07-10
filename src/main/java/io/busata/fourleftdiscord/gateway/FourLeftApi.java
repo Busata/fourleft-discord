@@ -20,7 +20,7 @@ public interface FourLeftApi {
 
 
     @GetMapping("club/{clubId}/members")
-    List<ClubMemberTo> getMembers(Long clubId);
+    List<ClubMemberTo> getMembers(@PathVariable long clubId);
 
     @GetMapping(value="club/{clubId}/results/previous")
     ClubResultTo getPreviousResults(@PathVariable long clubId);
