@@ -39,7 +39,7 @@ public class ClubMembersMessageFactory {
     public String createEntries(List<ClubMemberTo> members, Function<ClubMemberTo, String> entryCount) {
         return IntStream.range(0, members.size()).mapToObj(i -> {
             var entry = members.get(i);
-            return String.format("**%s** • %s • x**%s**", i, entry.displayName(), entryCount.apply(entry));
+            return String.format("**%s** • %s • x**%s**", i+1, entry.displayName(), entryCount.apply(entry));
         }).collect(Collectors.joining("\n"));
     }
 }
