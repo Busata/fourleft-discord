@@ -20,16 +20,16 @@ public class ClubMembersMessageFactory {
         builder.title("**Club members (%s members)**".formatted(String.valueOf(members.size())));
         builder.color(Color.of(244, 0, 75));
 
-        final var sortedByParticipation = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipParticipation)).limit(5).collect(Collectors.toList());
+        final var sortedByParticipation = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipParticipation).reversed()).limit(5).collect(Collectors.toList());
         builder.addField("Top 5 • Participation", "%s".formatted(createEntries(sortedByParticipation, (entry) -> String.valueOf(entry.championshipParticipation()))), false);
 
-        final var sortedByGold = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipGolds)).limit(5).collect(Collectors.toList());
+        final var sortedByGold = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipGolds).reversed()).limit(5).collect(Collectors.toList());
         builder.addField("Top 5 • :first_place:",  "%s".formatted(createEntries(sortedByGold, (entry) -> String.valueOf(entry.championshipGolds()))), false);
 
-        final var sortedBySilver = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipSilvers)).limit(5).collect(Collectors.toList());
+        final var sortedBySilver = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipSilvers).reversed()).limit(5).collect(Collectors.toList());
         builder.addField("Top 5 • :second_place:", "%s".formatted(createEntries(sortedBySilver, (entry) -> String.valueOf(entry.championshipSilvers()))), false);
 
-        final var sortedByBronze = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipBronzes)).limit(5).collect(Collectors.toList());
+        final var sortedByBronze = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipBronzes).reversed()).limit(5).collect(Collectors.toList());
         builder.addField("Top 5 • :third_place:", "%s".formatted(createEntries(sortedByBronze, (entry) -> String.valueOf(entry.championshipBronzes()))), false);
 
 
