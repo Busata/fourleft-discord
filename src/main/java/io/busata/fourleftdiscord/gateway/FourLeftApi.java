@@ -18,6 +18,10 @@ public interface FourLeftApi {
     @GetMapping(value="club/{clubId}/championship_standings")
     List<ChampionshipStandingEntryTo> getStandings(@PathVariable long clubId);
 
+
+    @GetMapping("club/{clubId}/members")
+    List<ClubMemberTo> getMembers(Long clubId);
+
     @GetMapping(value="club/{clubId}/results/previous")
     ClubResultTo getPreviousResults(@PathVariable long clubId);
 
@@ -50,4 +54,5 @@ public interface FourLeftApi {
 
     @GetMapping(value="discord/message")
     boolean hasMessage(@RequestParam long messageId, @RequestParam MessageType messageType);
+
 }

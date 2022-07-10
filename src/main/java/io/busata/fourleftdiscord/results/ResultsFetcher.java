@@ -40,6 +40,14 @@ public class ResultsFetcher {
         final var result = api.getStandings(clubId);
         return messageTemplateFacade.createEmbedFromStandingEntries(result);
     }
+
+    public EmbedCreateSpec getClubMemberStatsMessage(Snowflake channelId) {
+        final var clubId = channelConfigurationService.findClubByChannelId(channelId);
+
+        final var members = api.getMembers(clubId);
+        return messageTemplateFacade.createEmbedFromMembers(members);
+    }
+
     public List<EmbedCreateSpec> getCommunityEventMessages() {
         List<CommunityChallengeSummaryTo> communityResults = api.getCommunityResults();
         return messageTemplateFacade.createEmbedFromCommunityEventResults(communityResults);

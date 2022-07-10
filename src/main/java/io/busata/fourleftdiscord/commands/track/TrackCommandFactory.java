@@ -24,7 +24,7 @@ public class TrackCommandFactory implements CommandProvider {
     public ImmutableApplicationCommandRequest create() {
         ImmutableApplicationCommandRequest.Builder commandBuilder = ApplicationCommandRequest.builder()
                 .name(CommandNames.TRACK)
-                .defaultPermission(false)
+                .defaultPermission(true)
                 .description("Community event tracking");
 
         commandHandlers.stream()

@@ -33,7 +33,6 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
 
     @PostConstruct
     public void createCommand() {
-        /* TODO find a proper way to deploy command changes
         long applicationId = client.getRestClient().getApplicationId().block();
 
         deleteExistingCommands(applicationId);
@@ -46,19 +45,19 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
                         .createGuildApplicationCommand(applicationId, guild, commandRequest)
                         .subscribe();
             });
-        });*/
+        });
     }
 
     private void deleteExistingCommands(long applicationId) {
         List.of(DiscordGuilds.DIRTY_DISCORD, DiscordGuilds.BUSATA_DISCORD, DiscordGuilds.GRF_DISCORD, DiscordGuilds.SCOTTISH_RALLY_GROUP).forEach(guild -> {
             List<String> discordCommands = client.getRestClient()
                     .getApplicationService()
-                    .getGuildApplicationCommands(applicationId, guild)
+                    .getGlobalApplicationCommands(applicationId)
                     .map(ApplicationCommandData::id)
                     .collectList().block();
 
             discordCommands.forEach(commandId -> {
-                client.getRestClient().getApplicationService().deleteGuildApplicationCommand(applicationId, guild, Long.parseLong(commandId)).subscribe();
+                client.getRestClient().getApplicationService().deleteGlobalApplicationCommand(applicationId, Long.parseLong(commandId)).subscribe();
             });
         });
     }

@@ -2,6 +2,7 @@ package io.busata.fourleftdiscord.messages.creation;
 
 import discord4j.core.spec.EmbedCreateSpec;
 import io.busata.fourleftdiscord.gateway.dto.ChampionshipStandingEntryTo;
+import io.busata.fourleftdiscord.gateway.dto.ClubMemberTo;
 import io.busata.fourleftdiscord.gateway.dto.ClubResultTo;
 import io.busata.fourleftdiscord.gateway.dto.CommunityChallengeSummaryTo;
 import io.busata.fourleftdiscord.gateway.dto.ResultEntryTo;
@@ -15,6 +16,7 @@ import java.util.List;
 public class MessageTemplateFacade {
     private final ChampionshipStandingsMessageFactory championshipStandingsMessageFactory;
     private final ClubEventResultMessageFactory clubEventResultMessageFactory;
+    private final ClubMembersMessageFactory clubMembersMessageFactory;
     private final CommunityEventMessageFactory communityEventMessageFactory;
 
     private final AutoPostResultMessageFactory autoPostResultMessageFactory;
@@ -36,4 +38,7 @@ public class MessageTemplateFacade {
     }
 
 
+    public EmbedCreateSpec createEmbedFromMembers(List<ClubMemberTo> members) {
+        return clubMembersMessageFactory.create(members);
+    }
 }
