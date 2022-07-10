@@ -35,11 +35,13 @@ public class BotInputInteractionListener implements EventListener<ChatInputInter
     public void createCommand() {
         long applicationId = client.getRestClient().getApplicationId().block();
 
+        /*
         client.getChannelById(Snowflake.of(977962740234747954L)).ofType(MessageChannel.class).flatMap(channel -> {
             return channel.getMessageById(Snowflake.of(995646508735135836L)).flatMap(message -> {
                return message.delete();
             });
         }).block();
+*/
 
         /*deleteExistingCommands(applicationId);
 
