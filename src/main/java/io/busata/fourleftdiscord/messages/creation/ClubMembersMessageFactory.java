@@ -37,6 +37,6 @@ public class ClubMembersMessageFactory {
     }
 
     public String createEntries(List<ClubMemberTo> members, Function<ClubMemberTo, String> entryCount) {
-        return members.stream().map(entry -> String.format("**%s** • x**%s**", entry.displayName(), entryCount.apply(entry))).collect(Collectors.joining("\n"));
+        return members.stream().map(entry -> String.format("%s • x**%s**", entry.displayName(), entryCount.apply(entry))).collect(Collectors.joining("\n"));
     }
 }
