@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -21,22 +22,24 @@ public class ClubMembersMessageFactory {
         builder.color(Color.of(244, 0, 75));
 
         final var sortedByParticipation = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipParticipation).reversed()).limit(5).collect(Collectors.toList());
-        builder.addField("Top 5 • Participation", "%s".formatted(createEntries(sortedByParticipation, (entry) -> String.valueOf(entry.championshipParticipation()))), false);
+        builder.addField(":tickets: Most entries", "%s".formatted(createEntries(sortedByParticipation, (entry) -> String.valueOf(entry.championshipParticipation()))), false);
 
         final var sortedByGold = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipGolds).reversed()).limit(5).collect(Collectors.toList());
-        builder.addField("Top 5 • :first_place:",  "%s".formatted(createEntries(sortedByGold, (entry) -> String.valueOf(entry.championshipGolds()))), false);
+        builder.addField(":trophy: • Most 1st Places",  "%s".formatted(createEntries(sortedByGold, (entry) -> String.valueOf(entry.championshipGolds()))), false);
 
         final var sortedBySilver = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipSilvers).reversed()).limit(5).collect(Collectors.toList());
-        builder.addField("Top 5 • :second_place:", "%s".formatted(createEntries(sortedBySilver, (entry) -> String.valueOf(entry.championshipSilvers()))), false);
+        builder.addField(":second_place: • Most 2nd Places", "%s".formatted(createEntries(sortedBySilver, (entry) -> String.valueOf(entry.championshipSilvers()))), false);
 
         final var sortedByBronze = members.stream().sorted(Comparator.comparing(ClubMemberTo::championshipBronzes).reversed()).limit(5).collect(Collectors.toList());
-        builder.addField("Top 5 • :third_place:", "%s".formatted(createEntries(sortedByBronze, (entry) -> String.valueOf(entry.championshipBronzes()))), false);
-
+        builder.addField(":third_place: • Most 3rd Places", "%s".formatted(createEntries(sortedByBronze, (entry) -> String.valueOf(entry.championshipBronzes()))), false);
 
         return builder.build();
     }
 
     public String createEntries(List<ClubMemberTo> members, Function<ClubMemberTo, String> entryCount) {
-        return members.stream().map(entry -> String.format("%s • x**%s**", entry.displayName(), entryCount.apply(entry))).collect(Collectors.joining("\n"));
+        return IntStream.range(0, members.size()).mapToObj(i -> {
+            var entry = members.get(i);
+            return String.format("**%s** • %s • x**%s**", i, entry.displayName(), entryCount.apply(entry));
+        }).collect(Collectors.joining("\n"));
     }
 }
